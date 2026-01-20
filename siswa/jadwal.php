@@ -10,12 +10,20 @@
             <table class="w-full text-sm text-center text-gray-500">
                 <thead class="text-xs text-white uppercase bg-blue-600">
                     <?php
-                    $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    $days = [
+                        'Monday'    => 'Senin', 
+                        'Tuesday'   => 'Selasa', 
+                        'Wednesday' => 'Rabu', 
+                        'Thursday'  => 'Kamis', 
+                        'Friday'    => 'Jumat', 
+                        'Saturday'  => 'Sabtu', 
+                        'Sunday'    => 'Minggu'
+                    ];
                     ?>
                     <tr>
                         <th scope="col" class="px-6 py-3 border-r border-blue-500">Waktu</th>
-                        <?php foreach ($days as $day) : ?>
-                            <th scope="col" class="px-6 py-3 border-r border-blue-500"><?= $day ?></th>
+                        <?php foreach ($days as $day_eng => $day_indo) : ?>
+                            <th scope="col" class="px-6 py-3 border-r border-blue-500"><?= $day_indo ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
@@ -36,6 +44,7 @@
                             if (stripos($break, 'Istirahat') !== false || stripos($break, 'Break') !== false) {
                                 // This is a break
                                 $timetable[] = [
+                                    'id'   => $fetch_period_row['id_sesi'],
                                     'type' => 'break',
                                     'name' => $break,
                                     'time' => $period_start_time . " - " . $period_end_time
@@ -43,6 +52,7 @@
                             } else {
                                 // This is a regular period
                                 $timetable[] = [
+                                    'id'   => $fetch_period_row['id_sesi'],
                                     'type' => 'period',
                                     'time' => $period_start_time . " - " . $period_end_time
                                 ];
@@ -59,36 +69,26 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <?php if ($period['type'] === 'break') { ?>
                                 <td class="px-6 py-4 font-bold text-gray-900 border-r"><?= $period_time_str ?></td>
-                                <td class="px-6 py-4 font-bold text-center bg-yellow-100 text-yellow-800" colspan="6">
+                                <td class="px-6 py-4 font-bold text-center bg-yellow-100 text-yellow-800" colspan="<?= count($days) ?>">
                                     <?= $period['name'] ?>
                                 </td>
                             <?php } else { ?>
                                 <td class="px-6 py-4 font-bold text-gray-900 border-r"><?= $period_time_str ?></td>
                                 
-                                <?php foreach ($days as $day) : ?>
+                                <?php foreach ($days as $day_eng => $day_indo) : ?>
                                     <td class="px-6 py-4 border-r border-gray-100 align-top h-full">
                                         <?php
-                                        // Retrieve foreign key IDs from the jadwal table
-                                        // Logic: Match Day and Time (Assuming Time checking logic needs refined query or direct relation to Period ID)
-                                        // Simplified: Get items where day matches and time matches the period's start time (conceptually)
-                                        // Better: We need id_sesi matching. But here we iterated calculated times.
-                                        // Let's try to match by approximation or ideally we should have stored period_id in $timetable array.
                                         
-                                        // NOTE: The previous code matched by start/end time.
-                                        // Let's refine the query to 'sesi' to get ID.
-                                        // Ideally $timetable should store ID. Rewrite array logic above slightly if needed?
-                                        // But for now, let's use the time string in WHERE clause again or JOIN.
-                                        
-                                        // Using JOIN is better for accuracy.
-                                        
+                                        $query_sesi_id = $period['id'];
+                                        $student_class = $_SESSION['student_class'];
+
+                                        // Query schedule for either English or Indonesian day name AND current class
                                         $sql = "SELECT j.j_id_kelas, j.j_id_seksi, j.j_id_guru, j.j_id_ruangan, j.j_mapel_id
                                         FROM jadwal AS j
-                                        INNER JOIN `sesi` AS p ON j.j_id_sesi = p.id_sesi
-                                        WHERE j.hari_jadwal = '$day' 
-                                        AND p.jam_mulai_sesi <= '$start_time_limit:00' 
-                                        AND p.jam_berakhir_sesi >= '$start_time_limit:00'
+                                        WHERE (j.hari_jadwal = '$day_eng' OR j.hari_jadwal = '$day_indo') 
+                                        AND j.j_id_sesi = '$query_sesi_id'
+                                        AND j.j_id_kelas = '$student_class'
                                         LIMIT 1"; 
-                                        // Note: time comparisons string wise might need '00' seconds
 
                                         $result = $conn->query($sql);
 
