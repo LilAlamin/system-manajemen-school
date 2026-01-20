@@ -2,7 +2,11 @@
     <div class="max-w-4xl mx-auto">
         <?php
         $student_id = $_SESSION['student_id'];
-        $student_sql = "SELECT * FROM `siswa` WHERE id_siswa='$student_id'";
+        $student_sql = "SELECT s.*, k.nama_kelas, se.judul_seksi 
+                        FROM `siswa` s
+                        LEFT JOIN `kelas` k ON s.kelas_siswa = k.id_kelas
+                        LEFT JOIN `seksi` se ON s.seksi_siswa = se.id_seksi
+                        WHERE s.id_siswa='$student_id'";
         $student_result = $conn->query($student_sql);
         $sno = 1;
         $student_row = $student_result->fetch_assoc();
@@ -52,10 +56,10 @@
 
                 <!-- Class info -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-6 border-b border-gray-100 items-center">
-                     <div class="font-medium text-gray-600">Kelas / Seksi</div>
+                     <div class="font-medium text-gray-600">Kelas / Jurusan</div>
                     <div class="md:col-span-2 text-gray-900">
-                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Kelas <?= $student_row['kelas_siswa'] ?></span>
-                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold ml-2">Seksi <?= $student_row['seksi_siswa'] ?></span>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Kelas <?= !empty($student_row['nama_kelas']) ? $student_row['nama_kelas'] : $student_row['kelas_siswa'] ?></span>
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-semibold ml-2">Jurusan <?= !empty($student_row['judul_seksi']) ? $student_row['judul_seksi'] : '-' ?></span>
                     </div>
                 </div>
 
