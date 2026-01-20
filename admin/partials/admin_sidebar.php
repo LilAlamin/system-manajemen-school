@@ -43,24 +43,24 @@
                <span class="flex-1 ml-3 whitespace-nowrap">Kelola Mapel</span>
             </a>
          </li>
-         <li>
+         <!-- <li>
             <a href="index.php?ruangan" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                <i class="fas fa-book w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                <span class="flex-1 ml-3 whitespace-nowrap">Kelola Ruangan</span>
             </a>
-         </li>
-         <li>
+         </li> -->
+         <!-- <li>
             <a href="index.php?periode" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                <i class="fas fa-clock w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                <span class="flex-1 ml-3 whitespace-nowrap">Kelola Sesi</span>
             </a>
-         </li>
-         <li>
+         </li> -->
+         <!-- <li>
             <a href="index.php?jadwal" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                <i class="fas fa-calendar-alt w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                <span class="flex-1 ml-3 whitespace-nowrap">Kelola Jadwal</span>
             </a>
-         </li>
+         </li> -->
          <li>
             <a href="index.php?lihat_absensi" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                <i class="far fa-calendar-check w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>

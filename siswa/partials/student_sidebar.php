@@ -46,12 +46,12 @@
                     <span class="ml-3 group-hover:translate-x-1 transition-transform">Catatan</span>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="index.php?jadwal" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 group transition duration-200">
                     <i class="fas fa-calendar-alt w-6 h-6 text-xl text-purple-500 group-hover:text-purple-700"></i>
                     <span class="ml-3 group-hover:translate-x-1 transition-transform">Jadwal Pelajaran</span>
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a href="index.php?pengumuman" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 group transition duration-200">
                     <i class="fas fa-bullhorn w-6 h-6 text-xl text-red-500 group-hover:text-red-700"></i>
