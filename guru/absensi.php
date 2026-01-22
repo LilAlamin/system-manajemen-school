@@ -21,14 +21,20 @@
         $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
         $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
         $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : '';
+        $search_query = isset($_GET['search_query']) ? trim($_GET['search_query']) : '';
 
         // Build Query Conditions
-        $where_clauses = ["1=1"]; // Default true
+        $teacher_id = $_SESSION['teacher_id'];
+        $where_clauses = ["a.a_id_guru = '$teacher_id'"]; 
+
         if (!empty($class_id)) {
             $where_clauses[] = "a.a_id_kelas = '$class_id'";
         }
         if (!empty($start_date) && !empty($end_date)) {
             $where_clauses[] = "a.tanggal_absensi BETWEEN '$start_date 00:00:00' AND '$end_date 23:59:59'";
+        }
+        if (!empty($search_query)) {
+            $where_clauses[] = "(s.nama_siswa LIKE '%$search_query%' OR k.nama_kelas LIKE '%$search_query%')";
         }
         $where_sql = implode(' AND ', $where_clauses);
 
@@ -58,6 +64,11 @@
             <form method="get" action="index.php" class="space-y-4 md:space-y-0 md:flex md:space-x-4 items-end">
                 <input type="hidden" name="absensi" value="">
                 
+                <div class="w-full md:w-1/4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Pencarian Data</label>
+                    <input type="text" name="search_query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Cari Siswa, Kelas..." value="<?= isset($search_query) ? htmlspecialchars($search_query) : '' ?>">
+                </div>
+
                 <div class="w-full md:w-1/4">
                     <label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai</label>
                     <input type="date" name="start_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="<?= $start_date ?>">
@@ -201,7 +212,8 @@
 // Handle Delete Logic (Keep this same)
 if (isset($_GET['hapus_absensi_id'])) {
     $id = $_GET['hapus_absensi_id'];
-    $del = "DELETE FROM `absensi` WHERE id_absensi = '$id'";
+    $teacher_id = $_SESSION['teacher_id'];
+    $del = "DELETE FROM `absensi` WHERE id_absensi = '$id' AND a_id_guru = '$teacher_id'";
     if($conn->query($del)){
         echo "<script>
             Swal.fire({

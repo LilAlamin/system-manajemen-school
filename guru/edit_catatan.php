@@ -10,7 +10,8 @@
         <?php
         if (isset($_GET['edit_catatan_id'])) {
             $id = $_GET['edit_catatan_id'];
-            $sql = "SELECT * FROM `catatan_siswa` WHERE id_catatan = '$id'";
+            $teacher_id = $_SESSION['teacher_id'];
+            $sql = "SELECT * FROM `catatan_siswa` WHERE id_catatan = '$id' AND c_id_guru = '$teacher_id'";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
@@ -98,7 +99,7 @@ if(isset($_POST['update_feedback'])) {
             c_id_siswa = '$student',
             catatan = '$feedback',
             status = '$status'
-            WHERE id_catatan = '$id'";
+            WHERE id_catatan = '$id' AND c_id_guru = '$_SESSION[teacher_id]'";
     
     if($conn->query($sql)) {
             echo "<script>

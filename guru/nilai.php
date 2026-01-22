@@ -21,14 +21,19 @@
         $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : '';
         $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
         $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
+        $search_query = isset($_GET['search_query']) ? trim($_GET['search_query']) : '';
 
         // Build Query Conditions
-        $where_clauses = ["1=1"]; 
+        $teacher_id = $_SESSION['teacher_id'];
+        $where_clauses = ["n.n_id_guru = '$teacher_id'"]; 
         if (!empty($class_id)) {
             $where_clauses[] = "n.n_id_kelas = '$class_id'";
         }
         if (!empty($start_date) && !empty($end_date)) {
             $where_clauses[] = "n.nilai_date BETWEEN '$start_date' AND '$end_date'";
+        }
+        if (!empty($search_query)) {
+            $where_clauses[] = "(s.nama_siswa LIKE '%$search_query%' OR m.nama_mapel LIKE '%$search_query%' OR n.nama_nilai LIKE '%$search_query%' OR n.tipe_nilai LIKE '%$search_query%')";
         }
         $where_sql = implode(' AND ', $where_clauses);
 
@@ -59,6 +64,11 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-100">
             <form method="get" action="index.php" class="space-y-4 md:space-y-0 md:flex md:space-x-4 items-end">
                 <input type="hidden" name="nilai" value="">
+                
+                <div class="w-full md:w-1/4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Pencarian Data</label>
+                    <input type="text" name="search_query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Cari Siswa, Mapel, dll..." value="<?= htmlspecialchars($search_query) ?>">
+                </div>
                 
                 <div class="w-full md:w-1/4">
                     <label class="block mb-2 text-sm font-medium text-gray-900">Tanggal Mulai</label>
@@ -205,7 +215,8 @@
 // Handle Delete
 if (isset($_GET['hapus_nilai_id'])) {
     $delete_id = $_GET['hapus_nilai_id'];
-    $del_sql = "DELETE FROM `nilai` WHERE id_nilai = '$delete_id'";
+    $teacher_id = $_SESSION['teacher_id'];
+    $del_sql = "DELETE FROM `nilai` WHERE id_nilai = '$delete_id' AND n_id_guru = '$teacher_id'";
     if ($conn->query($del_sql)) {
         echo "<script>
             Swal.fire({

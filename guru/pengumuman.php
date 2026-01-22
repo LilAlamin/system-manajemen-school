@@ -67,7 +67,22 @@
 
         <div class="space-y-6">
             <?php
-            $notice_sql = "SELECT * FROM `pengumuman` ORDER BY id_pengumuman DESC";
+            $teacher_id = $_SESSION['teacher_id'];
+            $p_id_kirim_teacher = $teacher_id . '555';
+            // Assuming admin uses 'admin' or p_id_kirim does not end in '555' or is specifically set. 
+            // Based on observed pattern, we might need to broaden it or assume 'admin' sender name. 
+            // However, looking at 'pengumuman' table structure, there's a 'p_id_kirim'.
+            // If admin announcements are global, maybe they have a specific ID or we check 'pengirim'.
+            // Let's assume standard admin ID convention or check if it's NOT another teacher.
+            
+            // Actually, safest is: Show mine OR Show where sender is Admin.
+            // Let's verify how admin sends. Usually admin uses specific ID or 'admin'.
+            // Let's try to filter by p_id_kirim matching this teacher OR pengirim being 'Admin'.
+            
+            $notice_sql = "SELECT * FROM `pengumuman` 
+                           WHERE p_id_kirim = '$p_id_kirim_teacher' 
+                           OR pengirim = 'Admin' 
+                           ORDER BY id_pengumuman DESC";
             $notice_result = $conn->query($notice_sql);
             
             if ($notice_result->num_rows > 0) {

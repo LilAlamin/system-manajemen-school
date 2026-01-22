@@ -10,11 +10,12 @@
         <?php
         if (isset($_GET['edit_absensi_id'])) {
             $id = $_GET['edit_absensi_id'];
+            $teacher_id = $_SESSION['teacher_id'];
             $sql = "SELECT a.*, s.nama_siswa, s.id_sims, k.nama_kelas 
                     FROM `absensi` a 
                     JOIN `siswa` s ON a.a_id_siswa = s.id_siswa 
                     JOIN `kelas` k ON a.a_id_kelas = k.id_kelas
-                    WHERE a.id_absensi = '$id'";
+                    WHERE a.id_absensi = '$id' AND a.a_id_guru = '$teacher_id'";
             $result = $conn->query($sql);
             
             if ($result && $result->num_rows > 0) {
@@ -84,7 +85,8 @@ if (isset($_POST['update_attendance'])) {
     $status = $_POST['status'];
     $id = $_GET['edit_absensi_id'];
     
-    $update_sql = "UPDATE `absensi` SET status_absensi = '$status' WHERE id_absensi = '$id'";
+    $teacher_id = $_SESSION['teacher_id'];
+    $update_sql = "UPDATE `absensi` SET status_absensi = '$status' WHERE id_absensi = '$id' AND a_id_guru = '$teacher_id'";
     
     if ($conn->query($update_sql)) {
          echo "<script>

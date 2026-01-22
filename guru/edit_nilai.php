@@ -10,7 +10,8 @@
         <?php
         if (isset($_GET['edit_nilai_id'])) {
             $id = $_GET['edit_nilai_id'];
-            $sql = "SELECT * FROM `nilai` WHERE id_nilai = '$id'";
+            $teacher_id = $_SESSION['teacher_id'];
+            $sql = "SELECT * FROM `nilai` WHERE id_nilai = '$id' AND n_id_guru = '$teacher_id'";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
@@ -135,7 +136,7 @@ if(isset($_POST['update_nilai'])) {
                 n_id_siswa = '$siswa',
                 n_id_mapel = '$mapel',
                 nilai_date = '$date'
-                WHERE id_nilai = '$id'";
+                WHERE id_nilai = '$id' AND n_id_guru = '$teacher_id'";
         
         if($conn->query($sql)) {
              echo "<script>
